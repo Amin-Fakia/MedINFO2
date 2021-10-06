@@ -6,8 +6,8 @@ pygame.init()
 
 
 # Define screen width and height
-WIDTH = 1600
-HEIGHT = 900
+WIDTH = 920
+HEIGHT = 400
 display = pygame.display.set_mode((WIDTH, HEIGHT))
 
 # Colors
@@ -34,33 +34,43 @@ def update_fps():
 
 def timer():
     txt = str()
+counter = 0
+counterF = 0
+times = []
+def get_counter():
+    return font.render(f"sucesses: {counter}",1, pygame.Color("coral"))
+def get_failCounter():
+    return font.render(f"failuers: {counterF}",1, pygame.Color("coral"))
+def game_over():
+    return font.render("Game Over",10, pygame.Color("coral"))
 # Main loop
 while True:
     current_time = pygame.time.get_ticks()
     display.fill(BLACK)
-    display.blit(update_fps(), (10,0))
-    
-    
+    display.blit(get_counter(),(WIDTH-100,0))
+    display.blit(get_failCounter(),(0,0))
     pygame.draw.circle(display, WHITE, (cx, cy), width_of_circle)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             quit() # The reason for this is to prevent errors due to the loop going on, we need to quit the whole Python application
-    
-    # TODO: Extract to a method
-    mousex = pygame.mouse.get_pos()[0]
-    mousey = pygame.mouse.get_pos()[1]
-    click = pygame.mouse.get_pressed()
-    sqx = (mousex - cx)**2
-    sqy = (mousey - cy)**2
+        if event.type == pygame.MOUSEBUTTONUP:
+            pos = pygame.mouse.get_pos()
+            if math.sqrt((pos[0]-cx)**2+(pos[1] - cy)**2) < width_of_circle:
+                counter +=1
+                cx = random.randint(20, WIDTH - 20)
+                cy = random.randint(20, HEIGHT - 20)
+                width_of_circle = random.randint(14, 20)
+                pygame.draw.circle(display, WHITE, (cx, cy), width_of_circle)
+            else:
+                counterF +=1
+                
 
-    # TODO: Extract to a method
-    if math.sqrt(sqx + sqy) < width_of_circle and click[0] == 1:
-        cx = random.randint(20, WIDTH - 20)
-        cy = random.randint(20, HEIGHT - 20)
-        width_of_circle = random.randint(14, 20)
-        pygame.draw.circle(display, WHITE, (cx, cy), width_of_circle)
-    
+    if counter > 10 or counterF > 10:
+        
+        display.fill(BLACK)
+        display.blit(game_over(),(WIDTH/2,HEIGHT/2))
+        pygame.display.update()
     
     clock.tick(60)
     pygame.display.update()
