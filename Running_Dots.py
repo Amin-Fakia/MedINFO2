@@ -65,7 +65,7 @@ while True:
     display.fill(BLACK)
     display.blit(get_counter(),(0,20))
     display.blit(get_failCounter(),(0,0))
-    
+    print("yo")
     pygame.draw.circle(display,WHITE,  (cx, cy), width_of_circle)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
