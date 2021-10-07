@@ -73,8 +73,6 @@ while True:
             quit() # The reason for this is to prevent errors due to the loop going on, we need to quit the whole Python application
         if event.type == pygame.MOUSEBUTTONUP:
             pos = pygame.mouse.get_pos()
-            
-            
             if math.sqrt((pos[0]-cx)**2+(pos[1] - cy)**2) < width_of_circle:
                 tic = time.time()
                 if counter > 0:
@@ -94,7 +92,7 @@ while True:
                 
     display.blit(get_time(),(0,40))
     display.blit(start(),((WIDTH/2)-75,HEIGHT-22))
-    if counter > 10 or counterF > 10:
+    if counter > 10 or counterF > 9 or counter+counterF > 9:
         while True:
             display.fill(BLACK)
             display.blit(get_percentage(),(250,HEIGHT/2))
