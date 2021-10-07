@@ -23,7 +23,7 @@ font = pygame.font.SysFont("Arial", 18)
 
 cx = random.randint(20, WIDTH - 20)
 cy = random.randint(20, HEIGHT - 20)
-width_of_circle = random.randint(14, 20)
+width_of_circle = 20
 
 
 def update_fps():
@@ -83,7 +83,7 @@ while True:
                 counter +=1
                 cx = random.randint(20, WIDTH - 20)
                 cy = random.randint(20, HEIGHT - 20)
-                width_of_circle = random.randint(30, 40)
+                
                 times.append(et)
                 
                 pygame.draw.circle(display, WHITE, (cx, cy), width_of_circle)
