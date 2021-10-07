@@ -23,7 +23,7 @@ font = pygame.font.SysFont("Arial", 18)
 
 cx = random.randint(20, WIDTH - 20)
 cy = random.randint(20, HEIGHT - 20)
-width_of_circle = 20
+width_of_circle = 30
 
 
 def update_fps():
@@ -42,7 +42,7 @@ def get_counter():
 def get_failCounter():
     return font.render(f"failuers: {counterF}",5, pygame.Color("coral"))
 def game_over():
-    return font.render("Game Over",20, pygame.Color("coral"))
+    return font.render(f"your sucess to failure percentage is: {(counter/(counter+counterF)) *100:.2f} %",20, pygame.Color("coral"))
 def get_percentage():
     # Try to think how we can skip a line so it looks like this
     #                   Game Over
@@ -50,9 +50,9 @@ def get_percentage():
     # \n doesnt work for font render we probably need to split it into 2 objects (2 font renderers)
     sm = sum(times)/(counter) if counter > 0 else counter == 1
    
-    return font.render(f"Game Over - your failure to sucess percentage is: {(counterF/(counter+counterF)) *100:.2f} % - your reaction time average: {sm:.2f} in ms",5, pygame.Color("coral"))
+    return font.render(f"Game Over - your failure to sucess percentage is: {(counterF/(counter+counterF)) *100:.2f} % - your reaction time average: {sm:.2f} in ms",1, pygame.Color("coral"))
 def get_time():
-    return font.render(f"Reaction Time: {int(et)} in ms",5, pygame.Color("red"))
+    return font.render(f"Reaction Time: {int(et)} in ms",1, pygame.Color("red"))
 def start():
 
     return font.render(f"{rts}",3, pygame.Color("coral"))
@@ -96,6 +96,7 @@ while True:
         while True:
             display.fill(BLACK)
             display.blit(get_percentage(),(250,HEIGHT/2))
+            display.blit(game_over(),(250,(HEIGHT/2)+20))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
