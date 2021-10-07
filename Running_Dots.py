@@ -2,6 +2,7 @@ import pygame
 import math  
 import random
 import time
+import pygame.gfxdraw
 pygame.init()
 
 
@@ -49,8 +50,9 @@ def get_percentage():
     #    your sucess to failure percent is: 0.9
     # \n doesnt work for font render we probably need to split it into 2 objects (2 font renderers)
     sm = sum(times)/(counter) if counter > 0 else counter == 1
-   
+    
     return font.render(f"Game Over - your failure to sucess percentage is: {(counterF/(counter+counterF)) *100:.2f} % - your reaction time average: {sm:.2f} in ms",1, pygame.Color("coral"))
+
 def get_time():
     return font.render(f"Reaction Time: {int(et)} in ms",1, pygame.Color("red"))
 def start():
@@ -64,7 +66,7 @@ while True:
     display.blit(get_counter(),(0,20))
     display.blit(get_failCounter(),(0,0))
     
-    pygame.draw.circle(display, WHITE, (cx, cy), width_of_circle)
+    pygame.draw.circle(display,WHITE,  (cx, cy), width_of_circle)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -86,7 +88,7 @@ while True:
                 
                 times.append(et)
                 
-                pygame.draw.circle(display, WHITE, (cx, cy), width_of_circle)
+                pygame.draw.circle(display,  WHITE,(cx, cy), width_of_circle)
             else:
                 counterF +=1
                 
