@@ -3,7 +3,14 @@ import math
 import random
 import time
 import pygame.gfxdraw
+from datetime import date
+from datetime import datetime
+import json
 pygame.init()
+
+# Get time and date
+now = datetime.now()
+dt_string = now.strftime("%d_%m_%Y_%H_%M_%S")
 
 
 # Define screen width and height
@@ -49,6 +56,9 @@ def get_failCounter():
 # Make it so it shows percentages and numbers in a readable way
 
 # Get texts for game over screen
+def get_average():
+    sm = sum(times)/(counter) if counter > 0 else counter == 1
+    return sm
 def game_over():
     return font.render(f"your sucess to failure percentage is: {(counter/(counter+counterF)) *100:.2f} %",20, pygame.Color("white"))
 def get_percentage():
@@ -56,9 +66,9 @@ def get_percentage():
     #                   Game Over
     #    your sucess to failure percent is: 0.9
     # \n doesnt work for font render we probably need to split it into 2 objects (2 font renderers)
-    sm = sum(times)/(counter) if counter > 0 else counter == 1
     
-    return font.render(f"Game Over - your failure to sucess percentage is: {(counterF/(counter+counterF)) *100:.2f} % - your reaction time average: {sm:.2f} in ms",1, pygame.Color("white"))
+    
+    return font.render(f"Game Over - your failure to sucess percentage is: {(counterF/(counter+counterF)) *100:.2f} % - your reaction time average: {get_average():.2f} in ms",1, pygame.Color("white"))
 
 def get_time():
     return font.render(f"Reaction Time: {int(et)} in ms",1, pygame.Color("coral"))
@@ -102,6 +112,8 @@ while True:
             display.blit(game_over(),(200,(HEIGHT/2)+20))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    with open(f"{dt_string}.json", 'w') as f:
+                        json.dump({"date and time":dt_string,"average":get_average()},f)
                     pygame.quit()
                     quit()
             clock.tick(60)
