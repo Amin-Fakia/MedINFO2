@@ -112,8 +112,8 @@ while True:
             display.blit(game_over(),(200,(HEIGHT/2)+20))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    with open(f"{dt_string}.json", 'w') as f:
-                        json.dump({"date and time":dt_string,"average":get_average()},f)
+                    with open(f"Data/{dt_string}.json", 'w') as f:
+                        json.dump({"date and time":dt_string,"average":get_average(), "failures":counterF,"successes":counter,"Success to failure percentage":counter/(counter+counterF),"failure to success percentage":counterF/(counter+counterF) },f)
                     pygame.quit()
                     quit()
             clock.tick(60)
