@@ -63,6 +63,7 @@ tic = 0
 toc = 0
 counter = 0
 counterF = 0
+num_t = 20 # number of tries
 times = []  # to store the times between clicking and appearance of the dots
 
 # Get text for start screen
@@ -125,7 +126,8 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()  # The reason for this is to prevent errors due to the loop going on, we need to quit the whole Python application
-        if event.type == pygame.MOUSEBUTTONUP:
+        if event.type == pygame.MOUSEBUTTONUP and event.button ==1:
+            
             pos = pygame.mouse.get_pos()
             if math.sqrt((pos[0] - cx) ** 2 + (pos[1] - cy) ** 2) < width_of_circle:
                 tic = time.time()
@@ -138,7 +140,7 @@ while True:
                 cx = random.randint(110, 790)
                 cy = random.randint(110, 660)
                 times.append(et)
-                ax.plot(times,'red')
+                ax.plot(times,'k')
                 canvas = agg.FigureCanvasAgg(fig)
                 canvas.draw()
                 renderer = canvas.get_renderer()
@@ -153,7 +155,7 @@ while True:
     display.blit(start(), ((WIDTH / 2) - 125, HEIGHT - 35))
     display.blit(surf, (WIDTH-425,HEIGHT-400))
     # max numbers of tries is: 10
-    if counter > 10 or counterF > 9 or counter + counterF > 9:
+    if counter > num_t or counterF > num_t or counter + counterF > num_t:
         # Load a new loop/screen
         while True:
             # display.fill(WHITE)
