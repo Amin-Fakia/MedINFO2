@@ -2,8 +2,37 @@ import pygame
 import math
 import random
 import time
+import matplotlib
+matplotlib.use("Agg")
+from datetime import date
+from datetime import datetime
+import json
+import pylab
+from pygame.locals import *
+matplotlib.use("Agg")
+import matplotlib.backends.backend_agg as agg
+
+fig = pylab.figure(figsize=[4, 4], # Inches
+                   dpi=100,        # 100 dots per inch, so the resulting buffer is 400x400 pixels
+                   )
+ax = fig.gca()
+ax.plot()
+canvas = agg.FigureCanvasAgg(fig)
+canvas.draw()
+renderer = canvas.get_renderer()
+raw_data = renderer.tostring_rgb()
+size = canvas.get_width_height()
+surf = pygame.image.fromstring(raw_data, size, "RGB")
+
 
 pygame.init()
+
+
+
+# Get time and date
+now = datetime.now()
+dt_string = now.strftime("%d_%m_%Y_%H_%M_%S")
+
 
 # Define screen width and height
 WIDTH = 1240
@@ -54,10 +83,11 @@ def get_failCounter():
 def get_time():
     return font.render(f"Reaktionszeit: {int(et)} ms", True, BLUE)
 
+def get_average():
+    sm = sum(times)/(counter) if counter > 0 else counter == 1
+    return sm
 
-# TODO:
-# both game_over and get_percentage should be one method
-# Make it so it shows percentages and numbers in a readable way
+
 
 
 # Get text for game over screen
@@ -79,6 +109,8 @@ def get_percentage():
 def start():
     return font.render(f"{rts}", True, BLACK)
 
+def getData():
+    return 1
 
 # Main loop
 while True:
@@ -86,6 +118,7 @@ while True:
     display.blit(game_start(), (20, 30))
     display.blit(get_counter(), (820, 100))
     display.blit(get_failCounter(), (820, 125))
+    
     pygame.draw.polygon(display, BLACK, ((20, 100), (20, 670), (800, 670), (800, 100)), 2)
     pygame.draw.circle(display, BLACK, (cx, cy), width_of_circle)
     for event in pygame.event.get():
@@ -105,22 +138,37 @@ while True:
                 cx = random.randint(110, 790)
                 cy = random.randint(110, 660)
                 times.append(et)
+                ax.plot(times,'red')
+                canvas = agg.FigureCanvasAgg(fig)
+                canvas.draw()
+                renderer = canvas.get_renderer()
+                raw_data = renderer.tostring_rgb()
+                size = canvas.get_width_height()
+                surf = pygame.image.fromstring(raw_data, size, "RGB")
+                
             else:
                 counterF += 1
 
     display.blit(get_time(), (820, 150))
     display.blit(start(), ((WIDTH / 2) - 125, HEIGHT - 35))
+    display.blit(surf, (WIDTH-425,HEIGHT-400))
     # max numbers of tries is: 10
     if counter > 10 or counterF > 9 or counter + counterF > 9:
         # Load a new loop/screen
         while True:
             # display.fill(WHITE)
             display.blit(game_over(), (320, (HEIGHT / 2)))
-            display.blit(game_success(), (820, (HEIGHT / 2)))
-            display.blit(get_percentage(), (820, (HEIGHT / 2) + 30))
+            display.blit(game_success(), (820, (HEIGHT / 2)-60))
+            display.blit(get_percentage(), (820, (HEIGHT / 2)-40))
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    with open(f"Data/{dt_string}.json", 'w') as f:
+                        json.dump({"date and time":dt_string,"average":get_average(),
+                                   "failures":counterF,
+                                   "successes":counter,
+                                   "Success to failure percentage":counter/(counter+counterF),
+                                   "failure to success percentage":counterF/(counter+counterF) },f)
                     pygame.quit()
                     quit()
             clock.tick(60)
