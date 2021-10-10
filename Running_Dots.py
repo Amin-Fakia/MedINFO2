@@ -144,7 +144,7 @@ while True:
                 cx = random.randint(110, 790)
                 cy = random.randint(110, 660)
                 times.append(et)
-                ax.plot(times,'k')
+                ax.plot(times,'blue')
                 canvas = agg.FigureCanvasAgg(fig)
                 canvas.draw()
                 renderer = canvas.get_renderer()
