@@ -109,7 +109,7 @@ while True:
         while True:
             display.fill(BLACK)
             display.blit(get_percentage(),(200,HEIGHT/2))
-            display.blit(game_over(),(200,(HEIGHT/2)+20))
+            display.blit(game_over(),(200,(HEIGHT/2)+30))
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     with open(f"Data/{dt_string}.json", 'w') as f:
