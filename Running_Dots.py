@@ -17,6 +17,10 @@ fig = pylab.figure(figsize=[4, 4], # Inches
                    )
 ax = fig.gca()
 ax.plot()
+# Remove top and right border
+ax.spines['right'].set_visible(False)
+ax.spines['top'].set_visible(False)
+
 canvas = agg.FigureCanvasAgg(fig)
 canvas.draw()
 renderer = canvas.get_renderer()
